@@ -1,0 +1,38 @@
+CREATE TABLE MasterData (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Type NVARCHAR(50) NOT NULL, -- Defines the type of master data (e.g., Brand, Class)
+    Name NVARCHAR(100) NOT NULL, -- The actual value (e.g., Audi, A-Class)
+    IsActive BIT NOT NULL DEFAULT 1 -- To allow deactivating values without deleting them
+);
+
+-- Seed data for Brand
+INSERT INTO MasterData (Type, Name) VALUES ('Brand', 'Audi');
+INSERT INTO MasterData (Type, Name) VALUES ('Brand', 'Jaguar');
+INSERT INTO MasterData (Type, Name) VALUES ('Brand', 'Land Rover');
+INSERT INTO MasterData (Type, Name) VALUES ('Brand', 'Renault');
+
+-- Seed data for Class
+INSERT INTO MasterData (Type, Name) VALUES ('Class', 'A-Class');
+INSERT INTO MasterData (Type, Name) VALUES ('Class', 'B-Class');
+INSERT INTO MasterData (Type, Name) VALUES ('Class', 'C-Class');
+
+
+CREATE TABLE CarModels (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Brand NVARCHAR(50) NOT NULL,
+    Class NVARCHAR(50) NOT NULL,
+    ModelName NVARCHAR(100) NOT NULL,
+    ModelCode NVARCHAR(10) NOT NULL UNIQUE,
+    Description NVARCHAR(MAX),
+    Features NVARCHAR(MAX),
+    Price DECIMAL(18,2) NOT NULL,
+    DateOfManufacturing DATETIME NOT NULL,
+    Active BIT NOT NULL,
+    SortOrder INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE CarModelImages (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    CarModelId INT NOT NULL FOREIGN KEY REFERENCES CarModels(Id) ON DELETE CASCADE,
+    ImageUrl NVARCHAR(MAX) NOT NULL
+);
