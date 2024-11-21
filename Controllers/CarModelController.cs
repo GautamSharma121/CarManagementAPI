@@ -30,7 +30,7 @@ namespace CarModelManagementAPI.NewFolder
         public async Task<Result<List<CarModel>>> SearchCarModels(string modelName, string modelCode)
         {
            Result<List<CarModel>> result = new Result<List<CarModel>>();
-          // result= await _carModel.SearchCarModelsAsync(modelName, modelCode);
+           result= await _carModel.SearchCarModels(modelName, modelCode);
            return result;
         }
 

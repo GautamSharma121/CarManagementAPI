@@ -9,7 +9,7 @@ namespace CarModelManagementAPI.Services
     {
         private ILogger<CarModelBusiness> _errorLogger;
         private readonly ICarModelRepository _carmodelRepo;
-      
+
         public CarModelBusiness(ICarModelRepository carModelRepository, ILogger<CarModelBusiness> errorLogger)
         {
             _carmodelRepo = carModelRepository;
@@ -24,7 +24,7 @@ namespace CarModelManagementAPI.Services
             {
                 var createCarModel = await this._carmodelRepo.CreateCarModel(carModel);
                 if (createCarModel != null && createCarModel.ID > default(int))
-                { 
+                {
                     result.Data = createCarModel;
                     result.IsSuccess = true;
                     await AddCarImages(createCarModel.ID, carModel.Images);
@@ -32,8 +32,8 @@ namespace CarModelManagementAPI.Services
             }
             catch (Exception ex)
             {
-                _errorLogger.LogError("there is an exception occur while creating carmodel",ex);
-                result.IsSuccess= false;
+                _errorLogger.LogError("there is an exception occur while creating carmodel", ex);
+                result.IsSuccess = false;
                 result.ErrorList.Add(new BusinessError("There are some occur while creating car model, please try after sometime"));
 
             }
@@ -42,10 +42,10 @@ namespace CarModelManagementAPI.Services
         public async Task<Result<bool>> AddCarImages(int carModelId, List<string> base64Images)
         {
             var result = new Result<bool>();
-            try 
+            try
             {
                 var carModel = await this._carmodelRepo.GetCarModelById(carModelId);
-                if (carModel==default(int))
+                if (carModel == default(int))
                 {
                     result.Data = false;
                     result.IsSuccess = false;
@@ -85,38 +85,41 @@ namespace CarModelManagementAPI.Services
             return result;
         }
 
-        public Task<List<CarModel>> SearchCarModels(string modelName, string modelCode)
+        public Task<Result<List<CarModel>>> GetCarModels(string orderBy)
         {
             throw new NotImplementedException();
         }
-
-        public Task<List<CarModel>> GetCarModels(string orderBy)
+        public async Task<Result<List<CarModel>>> SearchCarModels(string modelName, string modelCode)
         {
-            throw new NotImplementedException();
-        }
-        //public async Task<List<CarModel>> SearchCarModels(string modelName, string modelCode)
-        //{
-        //_errorLogger.LogInformation("approaching SearchCarModels:CarMdelBusiness");
-        //var result = new Result<List<CarModel>>();
-        //try
-        //{
-        //    var createCarModel = await this._carmodelRepo(carModel);
-        //    if (createCarModel != null && createCarModel.ID > default(int))
-        //    {
-        //        result.Data = createCarModel;
-        //        result.IsSuccess = true;
-        //        await AddCarImages(createCarModel.ID, carModel.Images);
-        //    }
-        //}
-        //catch (Exception ex)
-        //{
-        //    _errorLogger.LogError("there is an exception occur while creating carmodel", ex);
-        //    result.IsSuccess = false;
-        //    result.ErrorList.Add(new BusinessError("There are some occur while creating car model, please try after sometime"));
+            _errorLogger.LogInformation("Entering SearchCarModels: CarModelBusiness");
 
-        //}
-        //return result;
-        //  }
+            var result = new Result<List<CarModel>>();
+            try
+            {
+                // Call repository to search car models by modelName and modelCode
+                var carModels = await _carmodelRepo.SearchCarModels(modelName, modelCode);
+
+                if (carModels != null && carModels.Any())
+                {
+                    result.Data = carModels;
+                    result.IsSuccess = true;
+                    _errorLogger.LogInformation($"Found {carModels.Count} car models for modelName: {modelName}, modelCode: {modelCode}");
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.ErrorList.Add(new BusinessError("No car models found matching the search criteria."));
+                }
+            }
+            catch (Exception ex)
+            {
+                _errorLogger.LogError("An exception occurred while searching for car models", ex);
+                result.IsSuccess = false;
+                result.ErrorList.Add(new BusinessError("An error occurred while processing your request. Please try again later."));
+            }
+
+            return result;
+        }
 
         //public async Task<List<CarModel>> GetCarModels(string orderBy)
         //{ }
