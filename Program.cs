@@ -30,6 +30,8 @@ builder.Services.AddScoped<ICarModelBusiness, CarModelBusiness>();
 builder.Services.AddScoped<ICarModelRepository, CarModelRepository>();
 builder.Services.AddScoped<IMasterDataBusiness, MasterDataBusiness>();
 builder.Services.AddScoped<IMasterDataRepository, MasterDataRepository>();
+builder.Services.AddScoped<ISalesmanService, SalesmanService>();
+builder.Services.AddScoped<ISalesmanRepo,SalesmanRepository>();
 
 // Use built-in ILogger with dependency injection
 builder.Services.AddLogging();
