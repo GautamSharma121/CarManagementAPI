@@ -38,13 +38,13 @@ CREATE TABLE CarModelImages (
 );
 CREATE TABLE Salesmen
 (
-    Id INT PRIMARY KEY,
+    Id INT IDENTITY(1,1) PRIMARY KEY,
     Name NVARCHAR(100),
     TotalSalesPreviousYear DECIMAL(18, 2)
 );
 CREATE TABLE SalesRecords
 (
-    Id INT PRIMARY KEY,
+    Id INT IDENTITY(1,1) PRIMARY KEY,
     SalesmanId INT FOREIGN KEY REFERENCES Salesmen(Id),
     CarBrand NVARCHAR(100),
     CarClass NVARCHAR(50),
