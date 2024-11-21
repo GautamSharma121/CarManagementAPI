@@ -36,3 +36,29 @@ CREATE TABLE CarModelImages (
     CarModelId INT NOT NULL FOREIGN KEY REFERENCES CarModels(Id) ON DELETE CASCADE,
     ImageUrl NVARCHAR(MAX) NOT NULL
 );
+CREATE TABLE Salesmen
+(
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    TotalSalesPreviousYear DECIMAL(18, 2)
+);
+CREATE TABLE SalesRecords
+(
+    Id INT PRIMARY KEY,
+    SalesmanId INT FOREIGN KEY REFERENCES Salesmen(Id),
+    CarBrand NVARCHAR(100),
+    CarClass NVARCHAR(50),
+    ModelPrice DECIMAL(18, 2),
+    SaleDate DATETIME
+);
+CREATE TABLE BrandCommissions
+(
+    Brand NVARCHAR(100) PRIMARY KEY,
+    FixedCommission DECIMAL(18, 2)
+);
+CREATE TABLE ClassCommissions
+(
+    CarClass NVARCHAR(50) PRIMARY KEY,
+    AdditionalPercentage DECIMAL(5, 2)
+);
+
